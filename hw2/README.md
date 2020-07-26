@@ -1,21 +1,21 @@
 # Домашнее задание №2
 
-## Команда установки БД из helm, вместе с файлом values.yaml
+### Команда установки БД из helm, вместе с файлом values.yaml
 
 helm install mngdb bitnami/mongodb -f values.yaml
 
-## Команда применения первоначальных миграций
+### Команда применения первоначальных миграций
 
 kubectl apply -f job-init.yaml
 
-## Команда kubectl apply -f, которая запускает в правильном порядке манифесты кубернетеса
+### Команда kubectl apply -f, которая запускает в правильном порядке манифесты кубернетеса
 
 kubectl apply -f config.yaml -f deployment.yaml -f service.yaml -f ingress.yaml
 
-## Postman коллекция, в которой будут представлены примеры запросов к сервису на создание, получение, изменение и удаление пользователя. В postman коллекции базовый url - arch.homework.
+### Postman коллекция, в которой будут представлены примеры запросов к сервису на создание, получение, изменение и удаление пользователя. В postman коллекции базовый url - arch.homework.
 
 newman run .\Otus_Arch_ilyakozyrev.postman_collection.json
 
-## Задание со звёздочкой
+### Задание со звёздочкой
 
 helm install kia-helm-chart .\kia-helm-chart

@@ -1,0 +1,13 @@
+apiVersion: v2
+name: kia-helm-chart
+description: A Helm chart for Kubernetes
+version: 0.1.0
+appVersion: hw2
+
+dependencies:
+  - name: mongodb
+    version: 8.x.x
+    repository: https://charts.bitnami.com/bitnami
+    condition: database.enabled
+    tags:
+      - mngdb

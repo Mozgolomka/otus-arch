@@ -1,0 +1,226 @@
+{
+	"info": {
+		"_postman_id": "fe1ac248-5456-4ee8-8940-bec072e3de6c",
+		"name": "Otus_Arch",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "hw1",
+			"item": [
+				{
+					"name": "Health Check",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Host",
+								"value": "arch.homework",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{URL}}/otusapp/ilyakozyrev/health",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"otusapp",
+								"ilyakozyrev",
+								"health"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Health Check",
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "hw2",
+			"item": [
+				{
+					"name": "Create User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "44ef9eee-2602-4ec1-b12f-4dc1ea5caedd",
+								"exec": [
+									"pm.environment.set(\"userId\", pm.response.json().data.data._id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"Administrator\",\r\n    \"firstName\": \"Ilya\",\r\n    \"lastName\": \"Kozyrev\",\r\n    \"email\": \"ilya.kozyrev@otus-arch.ru\",\r\n    \"phone\": \"+79998887766\",\r\n    \"role\": \"admin\",\r\n    \"password\": \"mysecretpass1234\",\r\n    \"passwordConfirm\": \"mysecretpass1234\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/otusapp/ilyakozyrev/api/v1/users/",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"otusapp",
+								"ilyakozyrev",
+								"api",
+								"v1",
+								"users",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"phone\": \"+79876543210\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/otusapp/ilyakozyrev/api/v1/users/{{userId}}",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"otusapp",
+								"ilyakozyrev",
+								"api",
+								"v1",
+								"users",
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/otusapp/ilyakozyrev/api/v1/users/{{userId}}",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"otusapp",
+								"ilyakozyrev",
+								"api",
+								"v1",
+								"users",
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/otusapp/ilyakozyrev/api/v1/users/{{userId}}",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"otusapp",
+								"ilyakozyrev",
+								"api",
+								"v1",
+								"users",
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/otusapp/ilyakozyrev/api/v1/users",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"otusapp",
+								"ilyakozyrev",
+								"api",
+								"v1",
+								"users"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Basic user CRUD",
+			"protocolProfileBehavior": {}
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "d471f7eb-92f9-4f5a-b2f1-e7b388658a7f",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "a5f39f98-c9df-4c63-be37-d7d5d671adbf",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "6f3dae10-2878-4629-bbdb-8feaf814d022",
+			"key": "userId",
+			"value": ""
+		},
+		{
+			"id": "1d4a8af6-02fc-49b7-b9e5-7787a84dee2a",
+			"key": "URL",
+			"value": "arch.homework"
+		}
+	],
+	"protocolProfileBehavior": {}
+}

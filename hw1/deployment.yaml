@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kia-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: kia-hw1
+  template:
+    metadata:
+      labels:
+        app: kia-hw1
+    spec:
+      containers:
+        - name: kia-otus-arch
+          image: ilyakozyrev/kia-otus-arch:hw1
+          ports:
+            - name: web
+              containerPort: 8000
+          livenessProbe:
+            httpGet:
+              port: 8000
+              path: /
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 2
+          readinessProbe:
+            httpGet:
+              port: 8000
+              path: /health
+            initialDelaySeconds: 10
+            periodSeconds: 5

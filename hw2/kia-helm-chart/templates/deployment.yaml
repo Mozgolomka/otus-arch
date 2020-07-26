@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "kia-helm-chart.fullname" . }}
+  labels:
+    {{- include "kia-helm-chart.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "kia-helm-chart.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/config.yaml") . | sha256sum }}
+      labels:
+        {{- include "kia-helm-chart.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          ports:
+            - name: web
+              containerPort: 80
+              protocol: TCP
+          env:
+            - name: NODE_ENV
+              valueFrom:
+                configMapKeyRef:
+                  name: kia-config
+                  key: node_env
+            - name: HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: kia-config
+                  key: host
+            - name: PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: kia-config
+                  key: port
+            - name: DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: kia-config
+                  key: database_uri
+            - name: DATABASE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: kia-secret
+                  key: username
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: kia-secret
+                  key: password
+          livenessProbe:
+            httpGet:
+              port: 8000
+              path: /
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 2
+          readinessProbe:
+            httpGet:
+              port: 8000
+              path: /health
+            initialDelaySeconds: 10
+            periodSeconds: 5

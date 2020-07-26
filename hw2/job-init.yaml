@@ -1,0 +1,25 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: kia-initdb
+spec:
+  template:
+    metadata:
+      name: kia-initdb
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: initdb
+        env:
+          - name: DATABASE_URI
+            value: "mongodb://admin:adminpassw0rd@mngdb:27017/hatters"
+        image: mongo
+        command:
+          - sh
+          - "-c"
+          - |
+            mongo $DATABASE_URI <<'EOF'
+              db.createCollection( "users" );
+              db.users.insert( { username: "MigrationUser", firstName: "John", lastName: "Smith", email: "john.smith@otus-arch.ru", phone: "+79995554433", role: "player", password: "pass1234", passwordConfirm: "pass1234" } );
+            EOF
+  backoffLimit: 2

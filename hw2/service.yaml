@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: kia-service
+spec:
+  selector:
+    app: kia-hw2
+  ports:
+    - protocol: TCP
+      port: 9000
+      targetPort: web
+  type: NodePort

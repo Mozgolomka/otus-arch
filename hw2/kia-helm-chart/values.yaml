@@ -1,0 +1,38 @@
+replicaCount: 2
+
+image:
+  repository: ilyakozyrev/kia-otus-arch
+
+service:
+  type: NodePort
+  port: 9000
+
+ingress:
+  enabled: false
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+  hosts:
+    - host: arch.homework
+      paths: [/otusapp/ilyakozyrev($|/)(.*)]
+      
+mongodb:
+  enabled: true
+  fullnameOverride: mngdb
+  auth:
+    enabled: true
+    username: admin
+    password: adminpassw0rd
+    database: hatters
+
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+        
+  persistence:
+    enabled: true
+    size: 1Gi
+
+  service:
+    type: NodePort
+    port: 27017

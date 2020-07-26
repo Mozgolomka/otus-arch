@@ -12,7 +12,9 @@ kubectl apply -f job-init.yaml
 
 kubectl apply -f config.yaml -f deployment.yaml -f service.yaml -f ingress.yaml
 
-### Postman коллекция, в которой будут представлены примеры запросов к сервису на создание, получение, изменение и удаление пользователя. В postman коллекции базовый url - arch.homework.
+### Postman-коллекция, в которой представлены примеры запросов к сервису.
+
+_Базовый url в коллекции – arch.homework_
 
 newman run .\Otus_Arch_ilyakozyrev.postman_collection.json
 

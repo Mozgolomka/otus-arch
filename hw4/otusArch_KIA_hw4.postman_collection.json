@@ -1,0 +1,575 @@
+{
+	"info": {
+		"_postman_id": "39c03fae-5f8f-4a7b-a23e-82ce895d5f44",
+		"name": "Otus Arch hw4",
+		"description": "Basic auth process and some security features",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Sign Up User1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "4db589e6-4198-44cb-9fc2-554d3467d037",
+						"exec": [
+							"pm.environment.set(\"jwt\", pm.response.json().token);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "df004b8a-98f3-465c-a22d-833ed5fb0a56",
+						"exec": [
+							"pm.collectionVariables.set(\"username\", pm.variables.replaceIn('{{$randomUserName}}'));\r",
+							"pm.collectionVariables.set(\"email\", pm.variables.replaceIn('{{$randomEmail}}').toLowerCase());\r",
+							"pm.collectionVariables.set(\"firstName\", pm.variables.replaceIn('{{$randomFirstName}}'));\r",
+							"pm.collectionVariables.set(\"lastName\", pm.variables.replaceIn('{{$randomLastName}}'));\r",
+							"pm.collectionVariables.set(\"password\", pm.variables.replaceIn('{{$randomPassword}}'));"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"{{username}}\",\r\n    \"firstName\": \"{{firstName}}\",\r\n    \"lastName\": \"{{lastName}}\",\r\n    \"phone\": \"+79998887766\",\r\n    \"email\": \"{{email}}\",\r\n    \"password\": \"{{password}}\",\r\n    \"passwordConfirm\": \"{{password}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/signup",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"signup"
+					]
+				},
+				"description": "User Registration"
+			},
+			"response": []
+		},
+		{
+			"name": "Log Out User1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "3ac3f280-6e9e-4617-8e9e-f5629796f1e7",
+						"exec": [
+							"pm.environment.set(\"jwt\", pm.response.json().token);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/logout",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"logout"
+					]
+				},
+				"description": "Logging off"
+			},
+			"response": []
+		},
+		{
+			"name": "Get My Profile NoAuth",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "c806e96c-ed69-440a-9fff-e559046ab38f",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/api/v1/users/me",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"users",
+						"me"
+					]
+				},
+				"description": "Logging off"
+			},
+			"response": []
+		},
+		{
+			"name": "Log In User1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "cc2bceae-7f2b-4672-8dab-9bd90f97a262",
+						"exec": [
+							"pm.environment.set(\"jwt\", pm.response.json().token);\r",
+							"pm.environment.set(\"userId\", pm.response.json().data.user._id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"{{email}}\",\r\n    \"password\": \"{{password}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/login",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"login"
+					]
+				},
+				"description": "Logging off"
+			},
+			"response": []
+		},
+		{
+			"name": "Get My Profile User1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "1047aaf9-098a-4ddf-9577-33b19ab32688",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/api/v1/users/me",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"users",
+						"me"
+					]
+				},
+				"description": "Logging off"
+			},
+			"response": []
+		},
+		{
+			"name": "Update My Profile User1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "9e42cd0c-4cb9-4bf3-8d90-615b0a899ae8",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"lastName\": \"Anderson\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/api/v1/users/updateMe",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"users",
+						"updateMe"
+					]
+				},
+				"description": "Logging off"
+			},
+			"response": []
+		},
+		{
+			"name": "Log Out User1 Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "a857ad50-21cf-42a3-bc99-f8d8b5c50280",
+						"exec": [
+							"pm.environment.set(\"jwt\", pm.response.json().token);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/logout",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"logout"
+					]
+				},
+				"description": "Logging off"
+			},
+			"response": []
+		},
+		{
+			"name": "Sign Up User2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "76f36ce5-1f2e-4c8b-9f43-c0bc2a61f3d2",
+						"exec": [
+							"pm.environment.set(\"jwt\", pm.response.json().token);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "4025e175-d453-4f82-ae73-21497db1fc73",
+						"exec": [
+							"pm.collectionVariables.set(\"username\", pm.variables.replaceIn('{{$randomUserName}}'));\r",
+							"pm.collectionVariables.set(\"email\", pm.variables.replaceIn('{{$randomEmail}}').toLowerCase());\r",
+							"pm.collectionVariables.set(\"firstName\", pm.variables.replaceIn('{{$randomFirstName}}'));\r",
+							"pm.collectionVariables.set(\"lastName\", pm.variables.replaceIn('{{$randomLastName}}'));\r",
+							"pm.collectionVariables.set(\"password\", pm.variables.replaceIn('{{$randomPassword}}'));"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"{{username}}\",\r\n    \"firstName\": \"{{firstName}}\",\r\n    \"lastName\": \"{{lastName}}\",\r\n    \"phone\": \"+79998887766\",\r\n    \"email\": \"{{email}}\",\r\n    \"password\": \"{{password}}\",\r\n    \"passwordConfirm\": \"{{password}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/signup",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"signup"
+					]
+				},
+				"description": "User Registration"
+			},
+			"response": []
+		},
+		{
+			"name": "Get User1 Data",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "62b440fd-66bf-46f7-ad9f-cf2b62ef35b2",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/api/v1/users/{{userId}}",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"users",
+						"{{userId}}"
+					]
+				},
+				"description": "Logging off"
+			},
+			"response": []
+		},
+		{
+			"name": "Update User1 Data",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "79738e3a-36a0-46ad-a806-8b47e72b5b22",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"lastName\": \"Jackson\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/api/v1/users/{{userId}}",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"users",
+						"{{userId}}"
+					]
+				},
+				"description": "Logging off"
+			},
+			"response": []
+		},
+		{
+			"name": "Log Out User2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "41509cf5-19c6-4831-927d-0ed152737d12",
+						"exec": [
+							"pm.environment.set(\"jwt\", pm.response.json().token);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/logout",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"logout"
+					]
+				},
+				"description": "Logging off"
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "59f2f641-7bfd-4ee9-88d6-e9d96cb7f670",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "02106da1-3196-4876-9f66-c012a0c3534c",
+				"type": "text/javascript",
+				"exec": [
+					"tests[\"[INFO] Request: \" + (('data' in request) ? request['data'] : '') ] = true;",
+					"tests[\"[INFO] Response: \" + responseBody] = true;"
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "52336beb-3fe5-4022-8fce-bc5211921345",
+			"key": "baseURL",
+			"value": "arch.homework"
+		},
+		{
+			"id": "8d6e54a7-b39d-4ed6-bb1c-4ccaef77caee",
+			"key": "jwt",
+			"value": ""
+		},
+		{
+			"id": "73ffbd4c-ce7e-4611-9684-e43a0f737965",
+			"key": "userId",
+			"value": ""
+		},
+		{
+			"id": "f40edcd8-823c-4c6d-9a23-709c16a9111b",
+			"key": "username",
+			"value": ""
+		},
+		{
+			"id": "90406bfd-d21e-4350-b015-8bf549af2301",
+			"key": "firstName",
+			"value": ""
+		},
+		{
+			"id": "9ac7df17-f500-4597-acd6-f73d86bf6b01",
+			"key": "lastName",
+			"value": ""
+		},
+		{
+			"id": "63709fd5-ee8c-4c38-babc-e34da129f47a",
+			"key": "email",
+			"value": ""
+		},
+		{
+			"id": "028cd548-7615-4f43-a0f6-62b9d4f12d4e",
+			"key": "password",
+			"value": ""
+		}
+	],
+	"protocolProfileBehavior": {}
+}

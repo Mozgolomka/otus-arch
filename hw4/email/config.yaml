@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kia-email-config
+data:
+  node: "development"
+  port: "8003"
+  mailtrap-host: "smtp.mailtrap.io"
+  mailtrap-port: "2525"
+  mailtrap-from: "santiago@gmail.com"
+  sendgrip-from: "mozgolom92@mail.ru"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: kia-email-secret
+type: Opaque
+data:
+  mailtrap-username: ZjdhOGFhNDczODY2Yjg=
+  mailtrap-password: ODFkN2U0Y2ViZGE5NTg=
+  sendgrip-username: YXBpa2V5
+  sendgrip-password: U0cuMFFMRTY2eVFUZ090eVNwcXZCTzdWQS5Beno4dFZhODdKeWtzT0Y5ZGpKcFNjN080V0UzWjR0WTBVS0VZVk5zSXZz

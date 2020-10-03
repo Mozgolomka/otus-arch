@@ -1,0 +1,86 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kia-email-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: kia-email-hw4
+  template:
+    metadata:
+      labels:
+        app: kia-email-hw4
+    spec:
+      containers:
+        - name: kia-otus-arch-email
+          image: ilyakozyrev/kia-otus-arch-email:hw4
+          env:
+            - name: NODE_ENV
+              valueFrom:
+                configMapKeyRef:
+                  name: kia-email-config
+                  key: node
+            - name: HOST
+              value: "0.0.0.0"
+            - name: PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: kia-email-config
+                  key: port
+            - name: EMAIL_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: kia-email-config
+                  key: mailtrap-host
+            - name: EMAIL_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: kia-email-config
+                  key: mailtrap-port
+            - name: EMAIL_FROM
+              valueFrom:
+                configMapKeyRef:
+                  name: kia-email-config
+                  key: mailtrap-from
+            - name: EMAIL_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: kia-email-secret
+                  key: mailtrap-username
+            - name: EMAIL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: kia-email-secret
+                  key: mailtrap-password
+            - name: SENDGRID_EMAIL_FROM
+              valueFrom:
+                configMapKeyRef:
+                  name: kia-email-config
+                  key: sendgrip-from
+            - name: SENDGRID_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: kia-email-secret
+                  key: sendgrip-username
+            - name: SENDGRID_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: kia-email-secret
+                  key: sendgrip-password
+          ports:
+            - name: email-web
+              containerPort: 8003
+          livenessProbe:
+            httpGet:
+              port: 8003
+              path: /
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 2
+          readinessProbe:
+            httpGet:
+              port: 8003
+              path: /health
+            initialDelaySeconds: 10
+            periodSeconds: 5

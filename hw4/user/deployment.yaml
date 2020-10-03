@@ -1,0 +1,78 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kia-user-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: kia-hw4
+  template:
+    metadata:
+      labels:
+        app: kia-hw4
+    spec:
+      containers:
+        - name: kia-otus-arch-user
+          image: ilyakozyrev/kia-otus-arch-user:hw4
+          env:
+            - name: NODE_ENV
+              valueFrom:
+                configMapKeyRef:
+                  name: kia-user-config
+                  key: node
+            - name: HOST
+              value: "0.0.0.0"
+            - name: PORT
+              value: "8001"
+            - name: DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: kia-user-config
+                  key: database_uri
+            - name: DATABASE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: kia-user-secret
+                  key: username
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: kia-user-secret
+                  key: password
+            - name: JWT_EXPIRES_IN
+              valueFrom:
+                configMapKeyRef:
+                  name: kia-user-config
+                  key: jwt_expires_in
+            - name: JWT_COOKIE_EXPIRES_IN
+              valueFrom:
+                configMapKeyRef:
+                  name: kia-user-config
+                  key: jwt_cookie_expires_in
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: kia-user-secret
+                  key: jwt_secret
+            - name: EMAIL_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: kia-user-config
+                  key: email_url
+          ports:
+            - name: user-web
+              containerPort: 8001
+          livenessProbe:
+            httpGet:
+              port: 8001
+              path: /
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 2
+          readinessProbe:
+            httpGet:
+              port: 8001
+              path: /health
+            initialDelaySeconds: 10
+            periodSeconds: 5

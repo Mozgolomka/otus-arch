@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: kia-email-service
+  labels:
+    app: kia-email-hw4
+spec:
+  selector:
+    app: kia-email-hw4
+  ports:
+    - protocol: TCP
+      port: 9003
+      targetPort: email-web
+  type: NodePort

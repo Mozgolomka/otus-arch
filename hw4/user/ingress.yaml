@@ -1,0 +1,35 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: kia-user-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/use-regex: "true"
+spec:
+  rules:
+  - host: arch.homework
+    http:
+      paths:
+        - path: /auth
+          backend:
+            serviceName: kia-user-service
+            servicePort: 9000
+        - path: /login
+          backend:
+            serviceName: kia-user-service
+            servicePort: 9000
+        - path: /signin
+          backend:
+            serviceName: kia-user-service
+            servicePort: 9000
+        - path: /signup
+          backend:
+            serviceName: kia-user-service
+            servicePort: 9000
+        - path: /logout
+          backend:
+            serviceName: kia-user-service
+            servicePort: 9000
+        - path: /api/v1/users/.*
+          backend:
+            serviceName: kia-user-service
+            servicePort: 9000

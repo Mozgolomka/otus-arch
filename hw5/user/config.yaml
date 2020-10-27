@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kia-user-config
+data:
+  node: "development"
+  port: "8001"
+  database_uri: "mongodb://<USERNAME>:<PASSWORD>@mngdb-auth:27017/hatters"
+  jwt_expires_in: "90d"
+  jwt_cookie_expires_in: "90"
+  email_url: "http://kia-email-service.app.svc.cluster.local:9003"
+  kafka_url: "cp-cp-kafka.broker.svc.cluster.local:9092"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: kia-user-secret
+type: Opaque
+data:
+  username: YWRtaW4=
+  password: YWRtaW5wYXNzdzByZA==
+  jwt_secret: S2FzZjg0ZkZBUzhnS0J6Kjd4R2FBSGxwWnE0MkJ4bGFpITlYLkhlSGJUWTdMNDI4NkhCZnNTamxBTnQuRmZGYXdKbXhJZ1h4WHBnSHI1Nkg1NU9pdXlLSE16ZHU1NGdiKmRoeHBTaDYyM1J5V3g3TG9TQTliT0IyJmhkekouR2g=

@@ -1,0 +1,263 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kia-billing-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: kia-billing-hw5
+  template:
+    metadata:
+      labels:
+        app: kia-billing-hw5
+    spec:
+      containers:
+        - name: kia-otus-arch-billing
+          image: ilyakozyrev/kia-otus-arch-billing:hw5
+          imagePullPolicy: Always
+          env:
+            - name: NODE_ENV
+              valueFrom:
+                configMapKeyRef:
+                  name: kia-billing-config
+                  key: node
+            - name: HOST
+              value: "0.0.0.0"
+            - name: PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: kia-billing-config
+                  key: port
+            - name: DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: kia-billing-config
+                  key: database_uri
+            - name: DATABASE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: kia-billing-secret
+                  key: username
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: kia-billing-secret
+                  key: password
+            - name: KAFKA_URL1
+              valueFrom:
+                configMapKeyRef:
+                  name: kia-billing-config
+                  key: kafka_url
+            - name: KAFKA_URL2
+              valueFrom:
+                configMapKeyRef:
+                  name: kia-billing-config
+                  key: kafka_url
+            - name: KAFKA_URL3
+              valueFrom:
+                configMapKeyRef:
+                  name: kia-billing-config
+                  key: kafka_url
+          ports:
+            - name: billing-web
+              containerPort: 8002
+          livenessProbe:
+            httpGet:
+              port: 8002
+              path: /
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 2
+          readinessProbe:
+            httpGet:
+              port: 8002
+              path: /health
+            initialDelaySeconds: 10
+            periodSeconds: 5
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kia-email-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: kia-email-hw5
+  template:
+    metadata:
+      labels:
+        app: kia-email-hw5
+    spec:
+      containers:
+        - name: kia-otus-arch-email
+          image: ilyakozyrev/kia-otus-arch-email:hw5
+          imagePullPolicy: Always
+          env:
+            - name: NODE_ENV
+              valueFrom:
+                configMapKeyRef:
+                  name: kia-email-config
+                  key: node
+            - name: HOST
+              value: "0.0.0.0"
+            - name: PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: kia-email-config
+                  key: port
+            - name: EMAIL_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: kia-email-config
+                  key: mailtrap-host
+            - name: EMAIL_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: kia-email-config
+                  key: mailtrap-port
+            - name: EMAIL_FROM
+              valueFrom:
+                configMapKeyRef:
+                  name: kia-email-config
+                  key: mailtrap-from
+            - name: EMAIL_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: kia-email-secret
+                  key: mailtrap-username
+            - name: EMAIL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: kia-email-secret
+                  key: mailtrap-password
+            - name: SENDGRID_EMAIL_FROM
+              valueFrom:
+                configMapKeyRef:
+                  name: kia-email-config
+                  key: sendgrip-from
+            - name: SENDGRID_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: kia-email-secret
+                  key: sendgrip-username
+            - name: SENDGRID_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: kia-email-secret
+                  key: sendgrip-password
+            - name: USER_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: kia-email-config
+                  key: user_url
+            - name: KAFKA_URL1
+              valueFrom:
+                configMapKeyRef:
+                  name: kia-email-config
+                  key: kafka_url
+            - name: KAFKA_URL2
+              valueFrom:
+                configMapKeyRef:
+                  name: kia-email-config
+                  key: kafka_url
+            - name: KAFKA_URL3
+              valueFrom:
+                configMapKeyRef:
+                  name: kia-email-config
+                  key: kafka_url
+          ports:
+            - name: email-web
+              containerPort: 8003
+          livenessProbe:
+            httpGet:
+              port: 8003
+              path: /
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 2
+          readinessProbe:
+            httpGet:
+              port: 8003
+              path: /health
+            initialDelaySeconds: 10
+            periodSeconds: 5
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kia-order-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: kia-order-hw5
+  template:
+    metadata:
+      labels:
+        app: kia-order-hw5
+    spec:
+      containers:
+        - name: kia-otus-arch-order
+          image: ilyakozyrev/kia-otus-arch-order:hw5
+          imagePullPolicy: Always
+          env:
+            - name: NODE_ENV
+              valueFrom:
+                configMapKeyRef:
+                  name: kia-order-config
+                  key: node
+            - name: HOST
+              value: "0.0.0.0"
+            - name: PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: kia-order-config
+                  key: port
+            - name: DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: kia-order-config
+                  key: database_uri
+            - name: DATABASE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: kia-order-secret
+                  key: username
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: kia-order-secret
+                  key: password
+            - name: KAFKA_URL1
+              valueFrom:
+                configMapKeyRef:
+                  name: kia-order-config
+                  key: kafka_url
+            - name: KAFKA_URL2
+              valueFrom:
+                configMapKeyRef:
+                  name: kia-order-config
+                  key: kafka_url
+            - name: KAFKA_URL3
+              valueFrom:
+                configMapKeyRef:
+                  name: kia-order-config
+                  key: kafka_url
+          ports:
+            - name: order-web
+              containerPort: 8004
+          livenessProbe:
+            httpGet:
+              port: 8004
+              path: /
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 2
+          readinessProbe:
+            httpGet:
+              port: 8004
+              path: /health
+            initialDelaySeconds: 10
+            periodSeconds: 5

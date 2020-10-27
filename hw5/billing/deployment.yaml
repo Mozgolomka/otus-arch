@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kia-billing-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: kia-billing-hw5
+  template:
+    metadata:
+      labels:
+        app: kia-billing-hw5
+    spec:
+      containers:
+        - name: kia-otus-arch-billing
+          image: ilyakozyrev/kia-otus-arch-billing:hw5
+          imagePullPolicy: Always
+          env:
+            - name: NODE_ENV
+              valueFrom:
+                configMapKeyRef:
+                  name: kia-billing-config
+                  key: node
+            - name: HOST
+              value: "0.0.0.0"
+            - name: PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: kia-billing-config
+                  key: port
+            - name: DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: kia-billing-config
+                  key: database_uri
+            - name: DATABASE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: kia-billing-secret
+                  key: username
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: kia-billing-secret
+                  key: password
+            - name: KAFKA_URL1
+              valueFrom:
+                configMapKeyRef:
+                  name: kia-billing-config
+                  key: kafka_url
+            - name: KAFKA_URL2
+              valueFrom:
+                configMapKeyRef:
+                  name: kia-billing-config
+                  key: kafka_url
+            - name: KAFKA_URL3
+              valueFrom:
+                configMapKeyRef:
+                  name: kia-billing-config
+                  key: kafka_url
+          ports:
+            - name: billing-web
+              containerPort: 8002
+          livenessProbe:
+            httpGet:
+              port: 8002
+              path: /
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 2
+          readinessProbe:
+            httpGet:
+              port: 8002
+              path: /health
+            initialDelaySeconds: 10
+            periodSeconds: 5

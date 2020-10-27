@@ -1,0 +1,457 @@
+{
+	"info": {
+		"_postman_id": "48b3f421-b63f-4c1e-9b36-347adcb35de3",
+		"name": "Otus Arch hw5",
+		"description": "Basic auth process and some security features",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Sign Up User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "070d3307-9227-47cf-9ff1-751b87b89f65",
+						"exec": [
+							"pm.environment.set(\"jwt\", pm.response.json().token);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "36109b79-3599-4d9d-ba4d-1fba9f336a4f",
+						"exec": [
+							"pm.collectionVariables.set(\"username\", pm.variables.replaceIn('{{$randomUserName}}'));\r",
+							"pm.collectionVariables.set(\"email\", pm.variables.replaceIn('{{$randomEmail}}').toLowerCase());\r",
+							"pm.collectionVariables.set(\"firstName\", pm.variables.replaceIn('{{$randomFirstName}}'));\r",
+							"pm.collectionVariables.set(\"lastName\", pm.variables.replaceIn('{{$randomLastName}}'));\r",
+							"pm.collectionVariables.set(\"password\", pm.variables.replaceIn('{{$randomPassword}}'));"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"{{username}}\",\r\n    \"firstName\": \"{{firstName}}\",\r\n    \"lastName\": \"{{lastName}}\",\r\n    \"phone\": \"+79998887766\",\r\n    \"email\": \"{{email}}\",\r\n    \"password\": \"{{password}}\",\r\n    \"passwordConfirm\": \"{{password}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/signup",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"signup"
+					]
+				},
+				"description": "User Registration"
+			},
+			"response": []
+		},
+		{
+			"name": "Deposit Money",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "1852eb94-9691-45d4-baa9-0ac6b1f5f987",
+						"exec": [
+							"setTimeout(function(){}, [5000]);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"amount\": 500\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/api/v1/billing/deposit",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"billing",
+						"deposit"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Make Success Order",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "aa28c11d-215f-419a-b701-053e7f741886",
+						"exec": [
+							"pm.environment.set(\"orderId\", pm.response.json().orderId);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"price\": 400\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/api/v1/order/",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"order",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Account Amount after Success Order",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "7d78767e-d107-4475-a8b8-574d2d743184",
+						"exec": [
+							"setTimeout(function(){}, [5000]);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/api/v1/billing/getAccountAmount",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"billing",
+						"getAccountAmount"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Success Order Status",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "0cd82552-b178-4da8-b655-e7fded38d657",
+						"exec": [
+							"setTimeout(function(){}, [5000]);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/api/v1/order/getOrderInfo/{{orderId}}",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"order",
+						"getOrderInfo",
+						"{{orderId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Make Failed Order",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "5f6c44ad-15c3-4e41-9894-b4170ea62eda",
+						"exec": [
+							"pm.environment.set(\"orderId\", pm.response.json().orderId);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"price\": 400\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/api/v1/order/",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"order",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Account Amount after Failed Order",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "5c35609b-0643-47c1-8404-57cbb515d2e6",
+						"exec": [
+							"setTimeout(function(){}, [5000]);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/api/v1/billing/getAccountAmount",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"billing",
+						"getAccountAmount"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Failed Order Status",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "89638575-cdd4-457c-9f2f-0d5dc4220f4e",
+						"exec": [
+							"setTimeout(function(){}, [5000]);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/api/v1/order/getOrderInfo/{{orderId}}",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"order",
+						"getOrderInfo",
+						"{{orderId}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "a1281902-0328-41b2-9ae7-14f08a771f8c",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "f6a5babd-d758-4741-8622-d80452181896",
+				"type": "text/javascript",
+				"exec": [
+					"tests[\"[INFO] Request: \" + (('data' in request) ? request['data'] : '') ] = true;",
+					"tests[\"[INFO] Response: \" + responseBody] = true;"
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "35430048-46e7-401b-b515-e7ebe9dd852d",
+			"key": "baseURL",
+			"value": "arch.homework"
+		},
+		{
+			"id": "bff2ef3a-630f-43d5-a97c-0e2e3557c2a3",
+			"key": "jwt",
+			"value": ""
+		},
+		{
+			"id": "d74cfc03-8f3f-41e4-9fc9-76d4dce0d6ff",
+			"key": "userId",
+			"value": ""
+		},
+		{
+			"id": "b86d7842-6771-4998-8b10-4d6c89fffd72",
+			"key": "username",
+			"value": ""
+		},
+		{
+			"id": "272573a8-d5f2-428c-9eb4-10edf9c504ba",
+			"key": "firstName",
+			"value": ""
+		},
+		{
+			"id": "ad8302e1-3286-4079-85f1-d162d23c6884",
+			"key": "lastName",
+			"value": ""
+		},
+		{
+			"id": "433258f9-415c-44c6-8485-51ff76dad895",
+			"key": "email",
+			"value": ""
+		},
+		{
+			"id": "1c619c30-fc07-479a-bfbf-f6c2aa31e2f5",
+			"key": "password",
+			"value": ""
+		},
+		{
+			"id": "0791cce5-4693-4411-abeb-274e2b1123a2",
+			"key": "orderId",
+			"value": ""
+		}
+	],
+	"protocolProfileBehavior": {}
+}

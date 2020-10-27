@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: kia-email-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/auth-url: "http://kia-user-service.auth.svc.cluster.local:9001/auth"
+    nginx.ingress.kubernetes.io/auth-signin: "http://$host/signin"
+    nginx.ingress.kubernetes.io/auth-response-headers: "X-User,X-Email,X-UserId,X-First-Name,X-Last-Name,X-User-Role"
+spec:
+  rules:
+  - host: arch.homework
+    http:
+      paths:
+        - path: /api/v1/email/sendWelcome
+          backend:
+            serviceName: kia-email-service
+            servicePort: 9003
+        - path: /api/v1/email/sendPasswordReset
+          backend:
+            serviceName: kia-email-service
+            servicePort: 9003

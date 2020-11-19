@@ -1,0 +1,19 @@
+fullnameOverride: mngdb-auth
+auth:
+  enabled: true
+  username: admin
+  password: adminpassw0rd
+  database: hatters
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+    
+persistence:
+  enabled: true
+  size: 1Gi
+
+service:
+  type: NodePort
+  port: 27017

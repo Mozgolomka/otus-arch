@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kia-order-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: kia-order-hw6
+  template:
+    metadata:
+      labels:
+        app: kia-order-hw6
+    spec:
+      containers:
+        - name: kia-otus-arch-order
+          image: ilyakozyrev/kia-otus-arch-order:hw6
+          imagePullPolicy: Always
+          env:
+            - name: NODE_ENV
+              valueFrom:
+                configMapKeyRef:
+                  name: kia-order-config
+                  key: node
+            - name: HOST
+              value: "0.0.0.0"
+            - name: PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: kia-order-config
+                  key: port
+            - name: DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: kia-order-config
+                  key: database_uri
+            - name: DATABASE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: kia-order-secret
+                  key: username
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: kia-order-secret
+                  key: password
+            - name: KAFKA_URL1
+              valueFrom:
+                configMapKeyRef:
+                  name: kia-order-config
+                  key: kafka_url
+            - name: KAFKA_URL2
+              valueFrom:
+                configMapKeyRef:
+                  name: kia-order-config
+                  key: kafka_url
+            - name: KAFKA_URL3
+              valueFrom:
+                configMapKeyRef:
+                  name: kia-order-config
+                  key: kafka_url
+          ports:
+            - name: order-web
+              containerPort: 8004
+          livenessProbe:
+            httpGet:
+              port: 8004
+              path: /
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 2
+          readinessProbe:
+            httpGet:
+              port: 8004
+              path: /health
+            initialDelaySeconds: 10
+            periodSeconds: 5

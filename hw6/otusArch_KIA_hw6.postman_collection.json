@@ -1,0 +1,489 @@
+{
+	"info": {
+		"_postman_id": "e1883df3-0342-4ae0-bee1-ec223be3d324",
+		"name": "Otus Arch hw6",
+		"description": "Basic auth process and some security features",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Sign Up User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "148ab87b-8df3-484b-97bf-c3d5d063f635",
+						"exec": [
+							"pm.environment.set(\"jwt\", pm.response.json().token);\r",
+							"setTimeout(function(){}, [1000]);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "ee9ffeba-af3a-4cd0-80c0-1b4365c2059b",
+						"exec": [
+							"pm.collectionVariables.set(\"username\", pm.variables.replaceIn('{{$randomUserName}}'));\r",
+							"pm.collectionVariables.set(\"email\", pm.variables.replaceIn('{{$randomEmail}}').toLowerCase());\r",
+							"pm.collectionVariables.set(\"firstName\", pm.variables.replaceIn('{{$randomFirstName}}'));\r",
+							"pm.collectionVariables.set(\"lastName\", pm.variables.replaceIn('{{$randomLastName}}'));\r",
+							"pm.collectionVariables.set(\"password\", pm.variables.replaceIn('{{$randomPassword}}'));"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"{{username}}\",\r\n    \"firstName\": \"{{firstName}}\",\r\n    \"lastName\": \"{{lastName}}\",\r\n    \"phone\": \"+79998887766\",\r\n    \"email\": \"{{email}}\",\r\n    \"password\": \"{{password}}\",\r\n    \"passwordConfirm\": \"{{password}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/signup",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"signup"
+					]
+				},
+				"description": "User Registration"
+			},
+			"response": []
+		},
+		{
+			"name": "Make Order",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "fa99154b-7a09-4b59-b523-f056df8c3e75",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "282df357-5e58-41b6-aa24-d55ea424e483",
+						"exec": [
+							"pm.environment.set(\"requestId\", pm.variables.replaceIn('{{$guid}}'));\r",
+							"setTimeout(function(){}, [1000]);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Request-Id",
+						"value": "{{requestId}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"price\": 400\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/api/v1/order/",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"order",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Make Order Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "fd59ffa1-c39f-4649-bbb4-7abd24b173b5",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "a1df1312-6a1b-4ce6-9a1b-b674d42babb4",
+						"exec": [
+							"setTimeout(function(){}, [1000]);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Request-Id",
+						"value": "{{requestId}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"price\": 400\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/api/v1/order/",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"order",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Orders",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "0bd1762b-62ef-4cb5-acab-514a6a39e238",
+						"exec": [
+							"setTimeout(function(){}, [5000]);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/api/v1/order/",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"order",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Make New Order",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "5a889b1e-f310-4456-98ab-5a81e1bb08e9",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "551f2164-2f18-41bc-876f-b63b9fcac64a",
+						"exec": [
+							"pm.environment.set(\"requestId\", pm.variables.replaceIn('{{$guid}}'));\r",
+							"setTimeout(function(){}, [1000]);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Request-Id",
+						"value": "{{requestId}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"price\": 400\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/api/v1/order/",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"order",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Make New Order Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "f23b03f3-c895-4e73-bab9-cd2c080488ac",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "e0e892ec-9dfa-4d98-913c-21bf7d185c5c",
+						"exec": [
+							"setTimeout(function(){}, [1000]);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Request-Id",
+						"value": "{{requestId}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"price\": 400\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/api/v1/order/",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"order",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Orders 2",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "e9cb822c-7619-4aa7-8e2c-c74600b83941",
+						"exec": [
+							"setTimeout(function(){}, [5000]);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/api/v1/order/",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"order",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "b1bfbb15-57e2-4294-b1cc-1c8644ab91a2",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "3d2ec755-4001-405f-b1d8-0eedc1996d2c",
+				"type": "text/javascript",
+				"exec": [
+					"tests[\"[INFO] Request: \" + (('data' in request) ? request['data'] : '') ] = true;",
+					"tests[\"[INFO] Response: \" + responseBody] = true;"
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "41f0f97e-edb5-4f67-a1db-511fbe238c34",
+			"key": "baseURL",
+			"value": "arch.homework"
+		},
+		{
+			"id": "b242024f-eb95-4551-9a69-4c19d8ea5c54",
+			"key": "jwt",
+			"value": ""
+		},
+		{
+			"id": "c58c5e7c-7638-4834-9e34-f95d816d1330",
+			"key": "userId",
+			"value": ""
+		},
+		{
+			"id": "e658d575-6800-473e-b9dc-54ce9d3b1e48",
+			"key": "username",
+			"value": ""
+		},
+		{
+			"id": "7c691bef-6a8b-47d5-b34a-cc632f85b7b3",
+			"key": "firstName",
+			"value": ""
+		},
+		{
+			"id": "48749a8c-cf23-4766-8e78-f58dcf557473",
+			"key": "lastName",
+			"value": ""
+		},
+		{
+			"id": "4cddc684-c66d-46b1-8cf6-707b459632c4",
+			"key": "email",
+			"value": ""
+		},
+		{
+			"id": "0eb60e99-6e99-46af-8753-d2c6fd9aaabd",
+			"key": "password",
+			"value": ""
+		},
+		{
+			"id": "f1819fb0-42d2-44b6-a748-3835ba6ad906",
+			"key": "requestId",
+			"value": ""
+		}
+	],
+	"protocolProfileBehavior": {}
+}
